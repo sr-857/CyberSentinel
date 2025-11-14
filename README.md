@@ -1,49 +1,14 @@
 # CyberSentinel
 
-<p align="center">
-  <img src="docs/images/banner.svg" alt="CyberSentinel repository banner" width="100%" />
-</p>
+Status overview:
 
-<p align="center">
-  <a href="https://github.com/sr-857/CyberSentinel/releases">
-    <img alt="Version" src="https://img.shields.io/github/v/tag/sr-857/CyberSentinel?label=version&sort=semver&color=1f6feb" />
-  </a>
-  <a href="https://github.com/sr-857/CyberSentinel/blob/main/LICENSE">
-    <img alt="MIT License" src="https://img.shields.io/badge/license-MIT-2ea043.svg" />
-  </a>
-  <a href="https://sr-857.github.io/CyberSentinel">
-    <img alt="Live Demo" src="https://img.shields.io/badge/demo-live-1d4ed8.svg" />
-  </a>
-  <a href="https://github.com/sr-857/CyberSentinel/actions/workflows/ci.yml">
-    <img alt="CI Status" src="https://github.com/sr-857/CyberSentinel/actions/workflows/ci.yml/badge.svg" />
-  </a>
-  <a href="https://github.com/sr-857/CyberSentinel/actions/workflows/codeql.yml">
-    <img alt="CodeQL" src="https://github.com/sr-857/CyberSentinel/actions/workflows/codeql.yml/badge.svg" />
-  </a>
-  <img alt="Tests" src="https://img.shields.io/badge/tests-passing-brightgreen.svg" />
-  <a href="https://hub.docker.com/r/sr857/cybersentinel">
-    <img alt="Docker Pulls" src="https://img.shields.io/docker/pulls/sr857/cybersentinel" />
-  </a>
-  <a href="https://github.com/sr-857/CyberSentinel/stargazers">
-    <img alt="GitHub Stars" src="https://img.shields.io/github/stars/sr-857/CyberSentinel?style=flat&color=facc15" />
-  </a>
-</p>
-
-<p align="center">
-  <img src="docs/images/demo.gif" alt="CyberSentinel SOC workflow demo" width="70%" />
-</p>
-
-<p align="center">
-  <img src="docs/images/dashboard.png" alt="CyberSentinel dashboard overview" width="88%" />
-</p>
-
-<p align="center">
-  <img src="docs/images/alerts.png" alt="CyberSentinel alert table screenshot" width="88%" />
-</p>
-
-<p align="center">
-  <img src="docs/images/charts.png" alt="CyberSentinel analytics charts screenshot" width="88%" />
-</p>
+- Latest release: [GitHub Releases](https://github.com/sr-857/CyberSentinel/releases)
+- License: [MIT](https://github.com/sr-857/CyberSentinel/blob/main/LICENSE)
+- Live demo: https://sr-857.github.io/CyberSentinel
+- CI pipeline: https://github.com/sr-857/CyberSentinel/actions/workflows/ci.yml
+- CodeQL security scan: https://github.com/sr-857/CyberSentinel/actions/workflows/codeql.yml
+- Docker image: https://hub.docker.com/r/sr857/cybersentinel
+- Stars & community: https://github.com/sr-857/CyberSentinel/stargazers
 
 CyberSentinel is a production-ready threat intelligence and log correlation dashboard. It ingests IOCs from open threat feeds, parses SSH/Apache server logs, correlates log activity against known malicious indicators, and presents analysts with an actionable browser-based dashboard complete with KPI tiles and Chart.js visualisations.
 
@@ -56,10 +21,6 @@ CyberSentinel is a production-ready threat intelligence and log correlation dash
 - Git + Make (optional) for developer tooling
 
 ## Architecture Overview
-
-<p align="center">
-  <img src="docs/images/architecture.png" alt="CyberSentinel platform architecture" width="92%" />
-</p>
 
 The high-contrast platform flow highlights:
 
@@ -165,9 +126,9 @@ Then open `frontend/index.html` directly or serve via your preferred static serv
 
 ## Dashboard Preview
 
-- Screenshots above show the interactive KPI tiles, alert tables, and analytics panels rendered by the SPA dashboard.
 - Primary interactions: **Fetch Intel → Parse Logs → Run Correlation → Workflow Refresh**.
 - Chart.js canvases highlight SSH failures over time, alert severity mix, and top offending IPs.
+- Alerts surface IOC matches with severity scoring, timestamps, and contextual metadata for triage.
 
 ## Recruiter Walkthrough
 
