@@ -1,0 +1,130 @@
+{
+  "updated_at": "2025-11-14T10:00:00Z",
+  "kpis": {
+    "intel_count": 128,
+    "ssh_events": 240,
+    "apache_events": 182,
+    "alerts": 12
+  },
+  "ssh_top_ips": [
+    {"ip": "203.0.113.24", "count": 32},
+    {"ip": "198.51.100.42", "count": 21},
+    {"ip": "192.0.2.17", "count": 16},
+    {"ip": "45.33.12.8", "count": 14},
+    {"ip": "91.198.174.192", "count": 11}
+  ],
+  "ssh_top_users": [
+    {"username": "root", "count": 41},
+    {"username": "deploy", "count": 18},
+    {"username": "analyst", "count": 9},
+    {"username": "ops", "count": 7},
+    {"username": "qa", "count": 5}
+  ],
+  "ssh_failures_over_time": [
+    {"time": "2025-11-13T20:00:00Z", "count": 6},
+    {"time": "2025-11-13T21:00:00Z", "count": 13},
+    {"time": "2025-11-13T22:00:00Z", "count": 18},
+    {"time": "2025-11-13T23:00:00Z", "count": 22},
+    {"time": "2025-11-14T00:00:00Z", "count": 19},
+    {"time": "2025-11-14T01:00:00Z", "count": 15},
+    {"time": "2025-11-14T02:00:00Z", "count": 11}
+  ],
+  "apache_top_paths": [
+    {"path": "/admin/login", "count": 28},
+    {"path": "/", "count": 24},
+    {"path": "/metrics", "count": 19},
+    {"path": "/health", "count": 15},
+    {"path": "/static/js/app.js", "count": 12}
+  ],
+  "apache_status_counts": [
+    {"status": "200", "count": 122},
+    {"status": "401", "count": 28},
+    {"status": "404", "count": 17},
+    {"status": "500", "count": 9},
+    {"status": "302", "count": 6}
+  ],
+  "alert_severity_counts": [
+    {"severity": "high", "count": 4},
+    {"severity": "medium", "count": 6},
+    {"severity": "low", "count": 2}
+  ],
+  "intel_table": [
+    {
+      "indicator": "203.0.113.24",
+      "type": "ipv4",
+      "source": "AbuseIPDB",
+      "confidence": 90
+    },
+    {
+      "indicator": "198.51.100.42",
+      "type": "ipv4",
+      "source": "AlienVault OTX",
+      "confidence": 80
+    },
+    {
+      "indicator": "malicious-domain.example",
+      "type": "domain",
+      "source": "Enrichment",
+      "confidence": 75
+    }
+  ],
+  "ssh_table": [
+    {
+      "event_time": "2025-11-14T00:42:08Z",
+      "ip_address": "203.0.113.24",
+      "username": "root",
+      "result": "FAILED"
+    },
+    {
+      "event_time": "2025-11-14T00:44:26Z",
+      "ip_address": "198.51.100.42",
+      "username": "deploy",
+      "result": "FAILED"
+    },
+    {
+      "event_time": "2025-11-14T01:05:17Z",
+      "ip_address": "192.0.2.17",
+      "username": "ops",
+      "result": "FAILED"
+    }
+  ],
+  "apache_table": [
+    {
+      "event_time": "2025-11-14T00:12:01Z",
+      "ip_address": "45.33.12.8",
+      "method": "GET",
+      "path": "/admin/login",
+      "status": 401
+    },
+    {
+      "event_time": "2025-11-14T00:29:44Z",
+      "ip_address": "91.198.174.192",
+      "method": "GET",
+      "path": "/metrics",
+      "status": 200
+    },
+    {
+      "event_time": "2025-11-14T01:11:09Z",
+      "ip_address": "203.0.113.24",
+      "method": "POST",
+      "path": "/api/login",
+      "status": 500
+    }
+  ],
+  "alerts_table": [
+    {
+      "created_at": "2025-11-14T00:44:30Z",
+      "indicator": "203.0.113.24",
+      "log_source": "ssh",
+      "severity": "high",
+      "message": "Brute force activity detected against root"
+    },
+    {
+      "created_at": "2025-11-14T00:29:45Z",
+      "indicator": "45.33.12.8",
+      "log_source": "apache",
+      "severity": "medium",
+      "message": "Repeated probing of /admin/login"
+    }
+  ]
+}

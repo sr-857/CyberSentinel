@@ -1,5 +1,10 @@
 # CyberSentinel
 
+![Release Pipeline](https://img.shields.io/github/actions/workflow/status/sr-857/CyberSentinel/release.yml?branch=main&label=release%20pipeline)
+![Version](https://img.shields.io/github/v/tag/sr-857/CyberSentinel?label=version&sort=semver)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+![Docker](https://img.shields.io/badge/docker-ready-0db7ed?logo=docker&logoColor=white)
+
 CyberSentinel is a production-ready threat intelligence and log correlation dashboard. It ingests IOCs from open threat feeds, parses SSH/Apache server logs, correlates log activity against known malicious indicators, and presents analysts with an actionable browser-based dashboard complete with KPI tiles and Chart.js visualisations.
 
 ## Architecture Overview
@@ -35,6 +40,9 @@ CyberSentinel/
 
 ## Quickstart
 
+### Live Demo / GitHub Pages Preview
+- Explore the static walkthrough at **https://sr-857.github.io/CyberSentinel** for an at-a-glance dashboard tour powered by sample data.
+
 ### Prerequisites
 - Docker & Docker Compose
 - AbuseIPDB + AlienVault OTX API keys (optional but recommended)
@@ -68,6 +76,14 @@ python -m backend.app          # launch Flask server (uses built-in dev server)
 ```
 
 Then open `frontend/index.html` directly or serve via your preferred static server.
+
+## System Architecture
+
+![CyberSentinel Architecture](docs/images/architecture.png)
+
+- Threat feeds and log sources flow into modular ingestion/parsing services.
+- SQLite persists indicators, parsed events, and generated alerts, providing a deterministic data backbone.
+- The analyst dashboard consumes REST endpoints for intel, logs, alerts, analytics, and a one-click refresh pipeline.
 
 ## API Endpoints
 
@@ -110,6 +126,12 @@ Talking points:
 - Built with Flask + Chart.js, deployable via Docker + Gunicorn.
 - Release automation, semantic versioning, and security-conscious defaults (.env handling, .gitignore, API key practices).
 - Extensible architecture: add feeds, logs, or correlation rules without rewriting the core.
+
+## Why CyberSentinel Matters
+- **Demonstrates security engineering depth** across data ingestion, parsing, correlation, analytics, and UI storytelling.
+- **Showcases production-minded operations** with Docker deployment, release automation, and a GitHub Pages preview that mirrors analyst workflows.
+- **Highlights portfolio-ready polish**: live badges, architecture diagram, and recruiter guidance make the project immediately legible to hiring managers.
+- **Invites collaboration** through clearly scoped contribution issues and sample data for rapid onboarding.
 
 ## Security Notes
 - Use API keys via environment variables—never commit them.

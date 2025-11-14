@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CyberSentinel Demo Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0f172a;
+      --card: #16233d;
+      --accent: #38bdf8;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at top, rgba(56,189,248,0.12), transparent 60%), var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      padding: 32px 24px 56px;
+    }
+    header, footer { max-width: 1100px; margin: 0 auto; text-align: center; }
+    header h1 { font-size: 2.5rem; margin-bottom: 8px; }
+    header p { color: var(--muted); margin: 0; }
+    .badge-bar { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
+    .badge-bar span {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    main { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 18px 40px rgba(8, 47, 73, 0.25);
+      border: 1px solid rgba(148, 163, 184, 0.08);
+    }
+    .card h2 { font-size: 1.1rem; margin: 0 0 12px; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; }
+    .kpi {
+      background: rgba(15, 23, 42, 0.3);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .kpi strong { display: block; font-size: 1.6rem; margin-bottom: 4px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+    th, td { padding: 8px 6px; text-align: left; }
+    th { color: var(--muted); font-weight: 600; border-bottom: 1px solid rgba(148, 163, 184, 0.2); }
+    tbody tr:nth-child(every) { background: transparent; }
+    tbody tr:hover { background: rgba(148, 163, 184, 0.12); }
+    .table-wrapper { max-height: 220px; overflow-y: auto; border-radius: 12px; border: 1px solid rgba(148, 163, 184, 0.12); }
+    footer p { color: var(--muted); font-size: 0.85rem; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>CyberSentinel Demo Dashboard</h1>
+    <p>Threat-intel ingestion + log parsing + IOC correlation + analytics — preloaded with sample data for GitHub Pages.</p>
+    <div class="badge-bar">
+      <span>Threat Intel</span>
+      <span>Log Parsing</span>
+      <span>Correlation</span>
+      <span>Alerts</span>
+      <span>Analytics</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="card" id="kpi-card">
+      <h2>Key Metrics</h2>
+      <div class="kpi-grid" id="kpi-grid"></div>
+    </section>
+
+    <section class="card">
+      <h2>SSH Failures (Hourly)</h2>
+      <canvas id="sshChart"></canvas>
+    </section>
+
+    <section class="card">
+      <h2>Top SSH IPs vs Users</h2>
+      <canvas id="sshTop"></canvas>
+    </section>
+
+    <section class="card">
+      <h2>Apache Status Mix</h2>
+      <canvas id="apacheStatus"></canvas>
+    </section>
+
+    <section class="card">
+      <h2>Alert Severity</h2>
+      <canvas id="alertSeverity"></canvas>
+    </section>
+
+    <section class="card">
+      <h2>Recent Indicators</h2>
+      <div class="table-wrapper">
+        <table id="intelTable">
+          <thead><tr><th>Indicator</th><th>Type</th><th>Source</th><th>Confidence</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Latest SSH Events</h2>
+      <div class="table-wrapper">
+        <table id="sshTable">
+          <thead><tr><th>Time</th><th>IP</th><th>User</th><th>Result</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Latest Apache Events</h2>
+      <div class="table-wrapper">
+        <table id="apacheTable">
+          <thead><tr><th>Time</th><th>IP</th><th>Method</th><th>Path</th><th>Status</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Alerts</h2>
+      <div class="table-wrapper">
+        <table id="alertsTable">
+          <thead><tr><th>When</th><th>Indicator</th><th>Source</th><th>Severity</th><th>Message</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Backed by the full CyberSentinel stack. Explore the source on <a href="https://github.com/sr-857/CyberSentinel" target="_blank" rel="noopener">GitHub</a>.</p>
+  </footer>
+
+  <script>
+    async function loadDemoData() {
+      const response = await fetch('demo/sample-data.json');
+      if (!response.ok) {
+        throw new Error('Unable to load demo data');
+      }
+      return response.json();
+    }
+
+    function renderKPIs(data) {
+      const grid = document.getElementById('kpi-grid');
+      grid.innerHTML = '';
+      const entries = [
+        { label: 'Intel Indicators', value: data.kpis.intel_count },
+        { label: 'SSH Events', value: data.kpis.ssh_events },
+        { label: 'Apache Events', value: data.kpis.apache_events },
+        { label: 'Alerts', value: data.kpis.alerts }
+      ];
+      entries.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'kpi';
+        div.innerHTML = `<strong>${item.value}</strong><span>${item.label}</span>`;
+        grid.appendChild(div);
+      });
+    }
+
+    function renderBarChart(ctxId, labels, datasetLabel, data, color = '#38bdf8') {
+      const el = document.getElementById(ctxId);
+      return new Chart(el, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{
+            label: datasetLabel,
+            data,
+            borderRadius: 6,
+            backgroundColor: color
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { ticks: { color: '#94a3b8' } },
+            y: { ticks: { color: '#94a3b8' }, beginAtZero: true }
+          }
+        }
+      });
+    }
+
+    function renderDoughnut(ctxId, labels, data, colors) {
+      const el = document.getElementById(ctxId);
+      return new Chart(el, {
+        type: 'doughnut',
+        data: {
+          labels,
+          datasets: [{
+            data,
+            backgroundColor: colors,
+            borderWidth: 0
+          }]
+        },
+        options: {
+          plugins: {
+            legend: { labels: { color: '#94a3b8' } }
+          }
+        }
+      });
+    }
+
+    function renderTable(id, rows, columns) {
+      const tbody = document.querySelector(`#${id} tbody`);
+      tbody.innerHTML = '';
+      rows.forEach(row => {
+        const tr = document.createElement('tr');
+        columns.forEach(col => {
+          const td = document.createElement('td');
+          td.textContent = row[col] ?? '-';
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+    }
+
+    loadDemoData().then(data => {
+      renderKPIs(data);
+
+      renderBarChart(
+        'sshChart',
+        data.ssh_failures_over_time.map(item => new Date(item.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })),
+        'Failed SSH Attempts',
+        data.ssh_failures_over_time.map(item => item.count)
+      );
+
+      renderBarChart(
+        'sshTop',
+        data.ssh_top_ips.map(item => item.ip),
+        'Attempts',
+        data.ssh_top_ips.map(item => item.count)
+      );
+
+      renderDoughnut(
+        'apacheStatus',
+        data.apache_status_counts.map(item => item.status),
+        data.apache_status_counts.map(item => item.count),
+        ['#38bdf8', '#f97316', '#facc15', '#ef4444', '#22c55e']
+      );
+
+      renderDoughnut(
+        'alertSeverity',
+        data.alert_severity_counts.map(item => item.severity.toUpperCase()),
+        data.alert_severity_counts.map(item => item.count),
+        ['#ef4444', '#f97316', '#38bdf8']
+      );
+
+      renderTable('intelTable', data.intel_table, ['indicator', 'type', 'source', 'confidence']);
+      renderTable('sshTable', data.ssh_table, ['event_time', 'ip_address', 'username', 'result']);
+      renderTable('apacheTable', data.apache_table, ['event_time', 'ip_address', 'method', 'path', 'status']);
+      renderTable('alertsTable', data.alerts_table, ['created_at', 'indicator', 'log_source', 'severity', 'message']);
+    }).catch(err => {
+      document.body.innerHTML = `<main style="max-width:640px;margin:80px auto;text-align:center;">
+        <h2>Demo Unavailable</h2>
+        <p>${err.message}</p>
+        <p>Open an issue on <a href="https://github.com/sr-857/CyberSentinel/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+      </main>`;
+    });
+  </script>
+</body>
+</html>
