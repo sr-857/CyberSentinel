@@ -1,11 +1,23 @@
 # CyberSentinel
 
-![Release Pipeline](https://img.shields.io/github/actions/workflow/status/sr-857/CyberSentinel/release.yml?branch=main&label=release%20pipeline)
-![CI](https://github.com/sr-857/CyberSentinel/actions/workflows/ci.yml/badge.svg)
-![Version](https://img.shields.io/github/v/tag/sr-857/CyberSentinel?label=version&sort=semver)
-![License](https://img.shields.io/badge/license-MIT-green.svg)
-![Docker](https://img.shields.io/badge/docker-ready-0db7ed?logo=docker&logoColor=white)
-[![Demo](https://img.shields.io/badge/demo-live-blue)](https://sr-857.github.io/CyberSentinel)
+<p align="center">
+  <a href="https://github.com/sr-857/CyberSentinel/releases">
+    <img alt="Version" src="https://img.shields.io/github/v/tag/sr-857/CyberSentinel?label=version&sort=semver&color=1f6feb" />
+  </a>
+  <a href="https://github.com/sr-857/CyberSentinel/blob/main/LICENSE">
+    <img alt="MIT License" src="https://img.shields.io/badge/license-MIT-2ea043.svg" />
+  </a>
+  <a href="https://sr-857.github.io/CyberSentinel">
+    <img alt="Live Demo" src="https://img.shields.io/badge/demo-live-1d4ed8.svg" />
+  </a>
+  <a href="https://github.com/sr-857/CyberSentinel/actions/workflows/ci.yml">
+    <img alt="CI Status" src="https://github.com/sr-857/CyberSentinel/actions/workflows/ci.yml/badge.svg" />
+  </a>
+  <img alt="Docker Ready" src="https://img.shields.io/badge/docker-ready-0db7ed.svg?logo=docker&logoColor=white" />
+  <a href="https://github.com/sr-857/CyberSentinel/stargazers">
+    <img alt="GitHub Stars" src="https://img.shields.io/github/stars/sr-857/CyberSentinel?style=flat&color=facc15" />
+  </a>
+</p>
 
 CyberSentinel is a production-ready threat intelligence and log correlation dashboard. It ingests IOCs from open threat feeds, parses SSH/Apache server logs, correlates log activity against known malicious indicators, and presents analysts with an actionable browser-based dashboard complete with KPI tiles and Chart.js visualisations.
 
