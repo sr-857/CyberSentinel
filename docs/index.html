@@ -13,6 +13,69 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body class="page">
+    <section class="hero" id="top">
+      <div class="hero__content">
+        <div class="hero__badge">SOC-ready • Static demo</div>
+        <h1 class="hero__title">CyberSentinel</h1>
+        <p class="hero__subtitle">
+          A premium threat intelligence and log correlation dashboard that distills feeds, telemetry,
+          and analytics into an analyst-ready command center.
+        </p>
+
+        <div class="hero__actions">
+          <a class="btn btn--accent hero__cta" href="#dashboard">Launch Interactive Demo</a>
+          <a
+            class="btn hero__cta"
+            href="https://github.com/sr-857/CyberSentinel"
+            target="_blank"
+            rel="noopener"
+          >View on GitHub</a>
+          <a
+            class="btn hero__cta"
+            href="https://github.com/sr-857/CyberSentinel/releases"
+            target="_blank"
+            rel="noopener"
+          >Release Notes</a>
+        </div>
+
+        <dl class="hero__stats" aria-label="Key performance highlights">
+          <div class="hero__stat">
+            <dt>128</dt>
+            <dd>Indicators enriched</dd>
+          </div>
+          <div class="hero__stat">
+            <dt>240</dt>
+            <dd>SSH events parsed</dd>
+          </div>
+          <div class="hero__stat">
+            <dt>12</dt>
+            <dd>Actionable alerts</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="hero__visual" aria-hidden="true">
+        <div class="hero__card">
+          <span class="hero__card-label">Workflow</span>
+          <ol>
+            <li>Fetch threat intel</li>
+            <li>Parse SSH &amp; Apache logs</li>
+            <li>Correlate &amp; triage alerts</li>
+          </ol>
+        </div>
+        <div class="hero__card hero__card--accent">
+          <span class="hero__card-label">SOC Outcomes</span>
+          <ul>
+            <li>High-fidelity brute force detection</li>
+            <li>Severity-weighted alerting</li>
+            <li>Executive-grade KPIs</li>
+          </ul>
+        </div>
+      </div>
+
+      <a class="hero__scroll" href="#dashboard" aria-label="Scroll to dashboard">Dive into the dashboard ↓</a>
+    </section>
+
     <header class="topbar">
       <div class="brand">
         <div class="brand__logo" aria-hidden="true">⚡</div>
@@ -28,7 +91,7 @@
       </nav>
     </header>
 
-    <main class="layout">
+    <main class="layout" id="dashboard">
       <aside class="panel panel--sidebar" aria-label="Operations overview">
         <h2 class="panel__title">Pipeline Status</h2>
         <div class="status" role="status" aria-live="polite">
