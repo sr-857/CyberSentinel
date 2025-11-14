@@ -1,211 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CyberSentinel | Threat Intelligence &amp; Log Correlation</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #0b1220;
-      --panel: #131c32;
-      --accent: #38bdf8;
-      --accent-soft: rgba(56, 189, 248, 0.18);
-      --text: #e2e8f0;
-      --muted: #94a3b8;
-      --border: rgba(148, 163, 184, 0.22);
-    }
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      margin: 0;
-      background: var(--bg);
-      font-family: "Inter", system-ui, sans-serif;
-      color: var(--text);
-      line-height: 1.6;
-      padding: 48px 24px 72px;
-    }
-    main {
-      max-width: 960px;
-      margin: 0 auto;
-    }
-    h1, h2 {
-      font-weight: 700;
-      margin-bottom: 12px;
-    }
-    h1 {
-      font-size: 2.7rem;
-      text-align: center;
-    }
-    h2 {
-      font-size: 1.6rem;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 6px;
-    }
-    p {
-      margin: 0 0 16px 0;
-      color: var(--muted);
-    }
-    ul {
-      margin: 0 0 16px 20px;
-    }
-    ul li {
-      margin-bottom: 6px;
-    }
-    .hero {
-      text-align: center;
-      margin-bottom: 52px;
-    }
-    .hero-actions {
-      margin-top: 24px;
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-    .cta {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px 22px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      color: var(--text);
-      text-decoration: none;
-      font-weight: 600;
-      background: rgba(19, 28, 50, 0.65);
-      transition: border-color 0.2s ease, transform 0.2s ease;
-    }
-    .cta:hover {
-      border-color: var(--accent);
-      transform: translateY(-1px);
-    }
-    .cta.accent {
-      background: var(--accent-soft);
-      color: var(--accent);
-      border-color: rgba(56, 189, 248, 0.4);
-    }
-    .panel {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 24px;
-      margin: 24px 0 32px;
-    }
-    img.diagram {
-      width: 100%;
-      max-width: 640px;
-      display: block;
-      margin: 24px auto;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-    }
-    pre {
-      background: #0f172a;
-      border-radius: 12px;
-      border: 1px solid rgba(148, 163, 184, 0.2);
-      padding: 16px;
-      overflow-x: auto;
-      color: var(--text);
-    }
-    a {
-      color: var(--accent);
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    footer {
-      margin-top: 48px;
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.85rem;
-    }
-  </style>
-</head>
-<body>
-  <main>
-    <section class="hero">
-      <h1>CyberSentinel</h1>
-      <p>CyberSentinel is a threat-intelligence ingestion and log-correlation pipeline built for SOC analysts. It captures IOCs, parses SSH and web logs, scores correlations, raises alerts, and exposes analytics through a single pane of glass.</p>
-      <div class="hero-actions">
-        <a class="cta accent" href="https://sr-857.github.io/CyberSentinel" target="_blank" rel="noopener">Launch Live Demo</a>
-        <a class="cta" href="https://github.com/sr-857/CyberSentinel" target="_blank" rel="noopener">View Source on GitHub</a>
-        <a class="cta" href="https://github.com/sr-857/CyberSentinel/releases" target="_blank" rel="noopener">Release Notes</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CyberSentinel Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="page">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand__logo" aria-hidden="true">⚡</div>
+        <div class="brand__meta">
+          <span class="brand__title">CyberSentinel</span>
+          <span class="brand__subtitle">Threat Intel · Log Correlation · SOC KPIs</span>
+        </div>
       </div>
-    </section>
+      <nav class="topbar__actions" aria-label="Primary actions">
+        <button id="fetch-intel" class="btn btn--accent" type="button">Fetch Intel</button>
+        <button id="parse-logs" class="btn" type="button">Parse Logs</button>
+        <button id="run-correlation" class="btn" type="button">Run Correlation</button>
+      </nav>
+    </header>
 
-    <section id="what">
-      <h2>What CyberSentinel Does</h2>
-      <div class="panel">
-        <ul>
-          <li>Ingests IOCs from AbuseIPDB and AlienVault OTX, normalises indicators, and persists confidence metadata.</li>
-          <li>Parses SSH authentication and Apache access logs to capture IPs, users, HTTP verbs, status codes, and timestamps.</li>
-          <li>Correlates parsed events with live intel to produce severity-weighted alerts.</li>
-          <li>Builds analyst dashboards with KPI tiles, trend charts, and data tables powered by Chart.js.</li>
-          <li>Offers a workflow refresh endpoint to chain intel ingestion, log parsing, correlation, and analytics in a single call.</li>
-        </ul>
-      </div>
-    </section>
+    <main class="layout">
+      <aside class="panel panel--sidebar" aria-label="Operations overview">
+        <h2 class="panel__title">Pipeline Status</h2>
+        <div class="status" role="status" aria-live="polite">
+          <span class="status__dot" aria-hidden="true"></span>
+          <span id="status" class="status__text">Waiting for action…</span>
+        </div>
 
-    <section id="why">
-      <h2>Why It Matters</h2>
-      <div class="panel">
-        <p>CyberSentinel demonstrates pragmatic security engineering. It automates the grind of gathering intel, cleansing telemetry, and prioritising threats so analysts can focus on response. Recruiters and hiring managers see how detection logic, data pipelines, and UX fit together.</p>
-      </div>
-    </section>
+        <div class="metrics">
+          <article class="metric-card" aria-live="polite">
+            <h3>SSH Events</h3>
+            <p id="total-ssh">0</p>
+          </article>
+          <article class="metric-card" aria-live="polite">
+            <h3>Apache Events</h3>
+            <p id="total-apache">0</p>
+          </article>
+          <article class="metric-card" aria-live="polite">
+            <h3>Active Alerts</h3>
+            <p id="total-alerts">0</p>
+          </article>
+        </div>
 
-    <section id="live-demo">
-      <h2>Live Demo</h2>
-      <div class="panel">
-        <p>Experience the dashboard with curated sample data directly from GitHub Pages—no local infrastructure needed.</p>
-        <p><strong>URL:</strong> <a href="https://sr-857.github.io/CyberSentinel" target="_blank" rel="noopener">https://sr-857.github.io/CyberSentinel</a></p>
-      </div>
-    </section>
+        <section class="panel__cta" aria-label="Quick walkthrough">
+          <h3>Workflow</h3>
+          <ol>
+            <li>Fetch latest IOCs from AbuseIPDB &amp; OTX.</li>
+            <li>Parse SSH and Apache logs for new events.</li>
+            <li>Run correlation to generate alerts &amp; analytics.</li>
+          </ol>
+        </section>
+      </aside>
 
-    <section id="architecture">
-      <h2>Architecture Overview</h2>
-      <div class="panel">
-        <p>The platform is composed of modular services backed by a lightweight SQLite store and exposed through Flask APIs.</p>
-        <img class="diagram" src="./images/architecture.png" alt="CyberSentinel architecture diagram" />
-        <ul>
-          <li><strong>Threat Feeds:</strong> AbuseIPDB and AlienVault OTX collectors with caching.</li>
-          <li><strong>Log Parsers:</strong> SSH and Apache pipelines with structured field extraction.</li>
-          <li><strong>Correlation Engine:</strong> Severity scoring based on IOC matches with contextual metadata.</li>
-          <li><strong>Analytics Builder:</strong> KPI aggregation and Chart.js-ready datasets.</li>
-          <li><strong>Dashboard:</strong> Static frontend consuming REST endpoints for intel, logs, alerts, and analytics.</li>
-        </ul>
-      </div>
-    </section>
+      <section class="panel panel--main" aria-label="Analyst workspace">
+        <section class="panel__group" aria-label="Analytics charts">
+          <article class="chart-card">
+            <header>
+              <h2>SSH Failures (last 7 hours)</h2>
+              <span class="chart-card__subtitle">Detections per hour aggregated from parsed logs</span>
+            </header>
+            <canvas id="ssh-trend-chart" height="260"></canvas>
+          </article>
+          <article class="chart-card">
+            <header>
+              <h2>Top Offending IPs</h2>
+              <span class="chart-card__subtitle">Failed SSH attempts ranked by volume</span>
+            </header>
+            <canvas id="ssh-top-ips-chart" height="260"></canvas>
+          </article>
+          <article class="chart-card">
+            <header>
+              <h2>Apache Status Codes</h2>
+              <span class="chart-card__subtitle">Distribution of HTTP statuses from access logs</span>
+            </header>
+            <canvas id="apache-status-chart" height="260"></canvas>
+          </article>
+          <article class="chart-card">
+            <header>
+              <h2>Alert Severity Mix</h2>
+              <span class="chart-card__subtitle">Correlation output grouped by severity score</span>
+            </header>
+            <canvas id="alert-severity-chart" height="260"></canvas>
+          </article>
+        </section>
 
-    <section id="get-started">
-      <h2>Get Started</h2>
-      <div class="panel">
-        <p>Deploy CyberSentinel quickly with Docker or run the backend locally for development.</p>
-        <pre><code># Docker Compose
-docker compose up --build
+        <section class="panel__group panel__group--tables" aria-label="Operational tables">
+          <article class="data-card">
+            <header>
+              <h2>Threat Intelligence</h2>
+              <p>IOC inventory normalised across AbuseIPDB and AlienVault OTX.</p>
+            </header>
+            <div class="table-wrapper">
+              <table id="intel-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Indicator</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Source</th>
+                    <th scope="col">Last Seen</th>
+                    <th scope="col">Confidence</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </article>
 
-# Local development
-python -m venv .venv
-source .venv/bin/activate
-pip install -r backend/requirements.txt
-python -m backend.db         # initialise SQLite schema
-python -m backend.app        # launch Flask API</code></pre>
-        <p>Open the dashboard and click <strong>Fetch Intel → Parse Logs → Run Correlation → Refresh Workflow</strong> to watch the full pipeline execute end-to-end.</p>
-      </div>
-    </section>
+          <article class="data-card">
+            <header>
+              <h2>SSH Login Failures</h2>
+              <p>Failed authentication attempts enriched with usernames and messages.</p>
+            </header>
+            <div class="table-wrapper">
+              <table id="ssh-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Timestamp</th>
+                    <th scope="col">IP</th>
+                    <th scope="col">User</th>
+                    <th scope="col">Message</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </article>
 
-    <section id="license">
-      <h2>License</h2>
-      <div class="panel">
-        <p>CyberSentinel is released under the <a href="https://github.com/sr-857/CyberSentinel/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>. Adapt it for training, interviews, or real-world SOC prototyping.</p>
-      </div>
-    </section>
+          <article class="data-card">
+            <header>
+              <h2>Apache Access Logs</h2>
+              <p>Web requests parsed with HTTP verbs, resources, and response codes.</p>
+            </header>
+            <div class="table-wrapper">
+              <table id="apache-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Timestamp</th>
+                    <th scope="col">IP</th>
+                    <th scope="col">Request</th>
+                    <th scope="col">Status</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </article>
 
-    <footer>
-      Built for security analysts and engineers. Contribute, fork, or reuse the workflow in your own SOC toolkit.
+          <article class="data-card data-card--wide">
+            <header>
+              <h2>Alerts</h2>
+              <p>IOC matches correlated across the estate with severity scoring.</p>
+            </header>
+            <div class="table-wrapper">
+              <table id="alerts-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Created</th>
+                    <th scope="col">Indicator</th>
+                    <th scope="col">Source</th>
+                    <th scope="col">Severity</th>
+                    <th scope="col">Message</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>© <span id="footer-year"></span> CyberSentinel · Analyst-ready threat intel automation.</p>
     </footer>
-  </main>
-</body>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" integrity="sha384-jGf4bm/FvGV8eK3opgDdGztqKqRR3YKHyCuXapnwYfJOLLmObAun1vDLteA94ppI" crossorigin="anonymous"></script>
+    <script>
+      window.__CYBERSENTINEL_DEMO__ = {
+        sampleData: "./demo/sample-data.json",
+      };
+    </script>
+    <script src="dashboard.js" defer></script>
+  </body>
 </html>
