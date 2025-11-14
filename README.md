@@ -1,18 +1,18 @@
-# CyberSentinel
+# 🛡️ CyberSentinel
 
 Status overview:
 
-- Latest release: [GitHub Releases](https://github.com/sr-857/CyberSentinel/releases)
-- License: [MIT](https://github.com/sr-857/CyberSentinel/blob/main/LICENSE)
-- Live demo: https://sr-857.github.io/CyberSentinel
-- CI pipeline: https://github.com/sr-857/CyberSentinel/actions/workflows/ci.yml
-- CodeQL security scan: https://github.com/sr-857/CyberSentinel/actions/workflows/codeql.yml
-- Docker image: https://hub.docker.com/r/sr857/cybersentinel
-- Stars & community: https://github.com/sr-857/CyberSentinel/stargazers
+- 📦 Latest release: [GitHub Releases](https://github.com/sr-857/CyberSentinel/releases)
+- 📄 License: [MIT](https://github.com/sr-857/CyberSentinel/blob/main/LICENSE)
+- 🌐 Live demo: https://sr-857.github.io/CyberSentinel
+- ✅ CI pipeline: https://github.com/sr-857/CyberSentinel/actions/workflows/ci.yml
+- 🔍 CodeQL scan: https://github.com/sr-857/CyberSentinel/actions/workflows/codeql.yml
+- 🐳 Docker image: https://hub.docker.com/r/sr857/cybersentinel
+- ⭐ Stars & community: https://github.com/sr-857/CyberSentinel/stargazers
 
 CyberSentinel is a production-ready threat intelligence and log correlation dashboard. It ingests IOCs from open threat feeds, parses SSH/Apache server logs, correlates log activity against known malicious indicators, and presents analysts with an actionable browser-based dashboard complete with KPI tiles and Chart.js visualisations.
 
-## System Requirements
+## 🛠️ System Requirements
 
 - Python ≥ 3.11
 - Docker ≥ 24 (for containerized deployment)
@@ -20,7 +20,7 @@ CyberSentinel is a production-ready threat intelligence and log correlation dash
 - Memory: ≥ 512 MB (2 GB recommended for container workloads)
 - Git + Make (optional) for developer tooling
 
-## Architecture Overview
+## 🧱 Architecture Overview
 
 The high-contrast platform flow highlights:
 
@@ -49,7 +49,7 @@ The high-contrast platform flow highlights:
 - `data/logs` contains realistic sample SSH and Apache logs.
 - `data/intel` persists the downloaded IOCs (mounted volume in Docker).
 
-## Design Decisions
+## 🧠 Design Decisions
 
 - **SQLite for persistence** — Embedded, zero-ops database with ACID semantics ideal for single-node SOC demos and quick resets.
 - **Flask REST API** — Lightweight, composable routing with blueprints ready for Gunicorn deployment.
@@ -58,7 +58,7 @@ The high-contrast platform flow highlights:
 - **Correlation severity model** — SSH matches default to `high`, web anomalies as `medium`, with room to extend to rule-based scoring.
 - **Regex-driven log parsing** — Explicit, unit-tested patterns enabling deterministic extraction for security investigations.
 
-## Quickstart
+## ⚡ Quickstart
 
 ### One-command local install
 
@@ -132,7 +132,7 @@ Then open `frontend/index.html` directly or serve via your preferred static serv
 - Responsive analyst workspace with sidebar metrics, live status messaging, and workflow walkthrough.
 - Accessibility-conscious controls: keyboard focus states, ARIA-live updates, and disabled-state management during long-running tasks.
 
-## Recruiter Walkthrough
+## 🎯 Recruiter Walkthrough
 
 Looking to demo CyberSentinel in under five minutes? Follow this script:
 
@@ -157,7 +157,7 @@ Talking points:
 - **Highlights portfolio-ready polish**: live badges, architecture diagram, and recruiter guidance make the project immediately legible to hiring managers.
 - **Invites collaboration** through clearly scoped contribution issues and sample data for rapid onboarding.
 
-## SOC Scenario Demo
+## 🚨 SOC Scenario Demo
 
 **Scenario: SSH brute force escalation**
 
@@ -174,14 +174,14 @@ Talking points:
 - SQLite is sufficient for MVP; migrate to managed SQL for multi-user deployments.
 - Ensure TLS termination in production (e.g., reverse proxy with HTTPS).
 
-## Future Enhancements
+## 🚀 Future Enhancements
 1. Add user authentication and RBAC for dashboard access.
 2. Enrich alerts with GeoIP/ASN data and MITRE ATT&CK mappings.
 3. Support additional log sources (e.g., Sysmon, firewall logs, cloud trail).
 4. Implement scheduled background jobs/APScheduler for continuous intel ingestion.
 5. Integrate with ticketing systems for automated alert escalation and reporting.
 
-## Folder Structure
+## 📁 Folder Structure
 
 ```
 CyberSentinel/
@@ -218,19 +218,19 @@ CyberSentinel/
 └── README.md
 ```
 
-## Quality & Testing
+## ✅ Quality & Testing
 
 - **Unit tests** live in `tests/` and validate log parsing, IOC correlation, and analytics aggregation.
 - **CI pipeline** executes linting, `py_compile`, and `pytest` on every push/pr.
 - **CodeQL security scanning** ensures static analysis coverage across the Python backend.
 
-## Roadmap
+## 🗺️ Roadmap
 - [ ] Webhook alert notifications ([#1](https://github.com/sr-857/CyberSentinel/issues/1))
 - [ ] CI smoke tests ([#2](https://github.com/sr-857/CyberSentinel/issues/2))
 - [ ] Role-based dashboard access
 - [ ] Scheduled IOC ingestion
 
-## Milestone Plan
+## 📅 Milestone Plan
 
 Public GitHub milestones to pin next-phase commitments:
 
@@ -241,14 +241,14 @@ Public GitHub milestones to pin next-phase commitments:
 
 Track milestone burndown from **Issues → Milestones** to communicate delivery cadence.
 
-## GitHub Publishing Checklist
+## 📝 GitHub Publishing Checklist
 - `gh repo edit sr-857/CyberSentinel --description "🛡️ CyberSentinel — Threat Intel + Log Correlation Dashboard…"` to set the tagline and SEO topics (`cybersecurity`, `threat-intelligence`, `soc-automation`, `flask`, `python`, `log-analysis`, `ioc-correlation`, `chartjs`, `docker`, `sqlite`, `security-analytics`).
 - Tag the release: `git tag -a v1.0.0 -m "CyberSentinel v1.0.0 — Initial analyst-ready release"` then `git push origin v1.0.0`.
 - Publish notes via `gh release create v1.0.0 --title "CyberSentinel v1.0.0" --notes-file docs/releases/v1.0.0.md`.
 - Upload the banner designed in `docs/banner_concept.md` to polish the repository header.
 - Pin the “Quick Demo for Recruiters” snippet near the top of the README or project description for instant context.
 
-## Docker Image Publishing
+## 🐳 Docker Image Publishing
 
 ```
 docker build -t sr857/cybersentinel:latest .
@@ -258,11 +258,11 @@ docker push sr857/cybersentinel:latest
 
 Once pushed, the Docker Hub badge above will reflect pull counts automatically.
 
-## CHANGELOG
+## 🗒️ CHANGELOG
 
 All releases are tracked in [`CHANGELOG.md`](CHANGELOG.md) using Keep a Changelog formatting.
 
-## MIT License
+## ⚖️ MIT License
 
 ```
 Copyright (c) 2025 CyberSentinel
