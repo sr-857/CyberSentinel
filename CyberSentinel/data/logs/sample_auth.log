@@ -1,0 +1,6 @@
+Oct 12 07:12:34 bastion sshd[18456]: Failed password for invalid user admin from 203.0.113.5 port 42157 ssh2
+Oct 12 07:12:38 bastion sshd[18456]: Failed password for invalid user root from 203.0.113.5 port 42157 ssh2
+Oct 12 08:44:12 bastion sshd[23751]: Failed password for ubuntu from 198.51.100.23 port 49201 ssh2
+Oct 12 11:03:02 bastion sshd[29841]: Failed password for invalid user deploy from 45.155.205.11 port 37742 ssh2
+Oct 12 11:03:05 bastion sshd[29841]: Failed password for invalid user deploy from 45.155.205.11 port 37742 ssh2
+Oct 12 14:24:19 bastion sshd[33785]: Failed password for invalid user git from 185.220.101.3 port 56621 ssh2

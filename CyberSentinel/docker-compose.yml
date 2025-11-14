@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  backend:
+    build: .
+    container_name: cybersentinel-backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./backend/.env.example
+    volumes:
+      - ./data/logs:/app/data/logs:ro
+      - ./data/intel:/app/data/intel
+    restart: unless-stopped
+
+  frontend:
+    image: nginx:alpine
+    container_name: cybersentinel-frontend
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+    restart: unless-stopped

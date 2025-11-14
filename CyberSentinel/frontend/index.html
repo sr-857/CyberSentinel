@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CyberSentinel Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>CyberSentinel Threat Intelligence Dashboard</h1>
+      <p class="subtitle">Monitor indicators, parse logs, and surface actionable alerts in one place.</p>
+    </header>
+
+    <main>
+      <section class="controls">
+        <button id="fetch-intel" class="primary">Fetch Intel</button>
+        <button id="parse-logs">Parse Logs</button>
+        <button id="run-correlation">Run Correlation</button>
+        <span id="status" role="status" aria-live="polite"></span>
+      </section>
+
+      <section class="metrics">
+        <div class="metric-card">
+          <h3>SSH Events</h3>
+          <p id="total-ssh">0</p>
+        </div>
+        <div class="metric-card">
+          <h3>Apache Events</h3>
+          <p id="total-apache">0</p>
+        </div>
+        <div class="metric-card">
+          <h3>Active Alerts</h3>
+          <p id="total-alerts">0</p>
+        </div>
+      </section>
+
+      <section class="charts">
+        <article>
+          <h2>SSH Fails Over Time</h2>
+          <canvas id="ssh-trend-chart" height="220"></canvas>
+        </article>
+        <article>
+          <h2>Top Offending IPs</h2>
+          <canvas id="ssh-top-ips-chart" height="220"></canvas>
+        </article>
+        <article>
+          <h2>Apache Status Codes</h2>
+          <canvas id="apache-status-chart" height="220"></canvas>
+        </article>
+        <article>
+          <h2>Alert Severity Mix</h2>
+          <canvas id="alert-severity-chart" height="220"></canvas>
+        </article>
+      </section>
+
+      <section class="grid">
+        <article>
+          <h2>Threat Intelligence</h2>
+          <table id="intel-table">
+            <thead>
+              <tr>
+                <th>Indicator</th>
+                <th>Type</th>
+                <th>Source</th>
+                <th>Last Seen</th>
+                <th>Confidence</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </article>
+
+        <article>
+          <h2>SSH Login Failures</h2>
+          <table id="ssh-table">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>IP</th>
+                <th>User</th>
+                <th>Message</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </article>
+
+        <article>
+          <h2>Apache Access Logs</h2>
+          <table id="apache-table">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>IP</th>
+                <th>Request</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </article>
+
+        <article class="wide">
+          <h2>Alerts</h2>
+          <table id="alerts-table">
+            <thead>
+              <tr>
+                <th>Created</th>
+                <th>Indicator</th>
+                <th>Source</th>
+                <th>Severity</th>
+                <th>Message</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </article>
+      </section>
+    </main>
+
+    <footer>
+      <p>CyberSentinel &mdash; Operational threat intelligence for modern defenders.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" integrity="sha384-jGf4bm/FvGV8eK3opgDdGztqKqRR3YKHyCuXapnwYfJOLLmObAun1vDLteA94ppI" crossorigin="anonymous"></script>
+    <script src="dashboard.js" defer></script>
+  </body>
+</html>

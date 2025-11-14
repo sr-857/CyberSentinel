@@ -1,0 +1,67 @@
+name: Release Automation
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build-and-release:
+    name: Build and publish release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate semantic version tag
+        id: semver
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          dry_run: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install backend dependencies
+        working-directory: ./backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run unit tests (if available)
+        run: |
+          if [ -f "backend/tests" ]; then
+            python -m pytest backend/tests
+          else
+            echo "No backend tests directory detected; skipping."
+          fi
+
+      - name: Generate release notes from template
+        id: notes
+        run: |
+          if [ -f docs/RELEASE_NOTES_TEMPLATE.md ]; then
+            cat docs/RELEASE_NOTES_TEMPLATE.md > release_notes.md
+          else
+            echo "Release notes template missing." > release_notes.md
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            release_notes.md
+          body_path: release_notes.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload changelog artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-assets
+          path: |
+            release_notes.md
+            docs/CHANGELOG_TEMPLATE.md
+            docs/SEMVER_GUIDE.md

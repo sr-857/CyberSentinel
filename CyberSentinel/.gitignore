@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.env
+cybersentinel.db
+data/*.db
+data/intel/*.json
