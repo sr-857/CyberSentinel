@@ -1,9 +1,11 @@
 # CyberSentinel
 
 ![Release Pipeline](https://img.shields.io/github/actions/workflow/status/sr-857/CyberSentinel/release.yml?branch=main&label=release%20pipeline)
+![CI](https://github.com/sr-857/CyberSentinel/actions/workflows/ci.yml/badge.svg)
 ![Version](https://img.shields.io/github/v/tag/sr-857/CyberSentinel?label=version&sort=semver)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Docker](https://img.shields.io/badge/docker-ready-0db7ed?logo=docker&logoColor=white)
+[![Demo](https://img.shields.io/badge/demo-live-blue)](https://sr-857.github.io/CyberSentinel)
 
 CyberSentinel is a production-ready threat intelligence and log correlation dashboard. It ingests IOCs from open threat feeds, parses SSH/Apache server logs, correlates log activity against known malicious indicators, and presents analysts with an actionable browser-based dashboard complete with KPI tiles and Chart.js visualisations.
 
@@ -146,6 +148,12 @@ Talking points:
 3. Support additional log sources (e.g., Sysmon, firewall logs, cloud trail).
 4. Implement scheduled background jobs/APScheduler for continuous intel ingestion.
 5. Integrate with ticketing systems for automated alert escalation and reporting.
+
+## Roadmap
+- [ ] Webhook alert notifications ([#1](https://github.com/sr-857/CyberSentinel/issues/1))
+- [ ] CI smoke tests ([#2](https://github.com/sr-857/CyberSentinel/issues/2))
+- [ ] Role-based dashboard access
+- [ ] Scheduled IOC ingestion
 
 ## GitHub Publishing Checklist
 - `gh repo edit sr-857/CyberSentinel --description "🛡️ CyberSentinel — Threat Intel + Log Correlation Dashboard…"` to set the tagline and SEO topics (`cybersecurity`, `threat-intelligence`, `soc-automation`, `flask`, `python`, `log-analysis`, `ioc-correlation`, `chartjs`, `docker`, `sqlite`, `security-analytics`).
