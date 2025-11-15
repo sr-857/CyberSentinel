@@ -498,25 +498,34 @@ function configureChartDefaults() {
   Chart.defaults.font.size = 12;
   Chart.defaults.responsive = true;
   Chart.defaults.maintainAspectRatio = false;
-  Chart.defaults.animation = {
-    duration: 350,
-    easing: "easeOutQuart",
-  };
-  Chart.defaults.animations = Chart.defaults.animations || {};
+  Chart.defaults.animation = Chart.defaults.animation || {};
+  Chart.defaults.animation.duration = 350;
+  Chart.defaults.animation.easing = "easeOutQuart";
+
   Chart.defaults.elements = Chart.defaults.elements || {};
+  const lineDefaults = Chart.defaults.elements.line || {};
   Chart.defaults.elements.line = {
+    ...lineDefaults,
     tension: 0.3,
     borderWidth: 2,
     borderCapStyle: "round",
     borderJoinStyle: "round",
     fill: true,
+    borderDash: [],
+    borderDashOffset: 0,
   };
+
+  const pointDefaults = Chart.defaults.elements.point || {};
   Chart.defaults.elements.point = {
+    ...pointDefaults,
     radius: 0,
     hitRadius: 6,
     hoverRadius: 3,
   };
+
+  const barDefaults = Chart.defaults.elements.bar || {};
   Chart.defaults.elements.bar = {
+    ...barDefaults,
     borderRadius: 8,
     borderSkipped: false,
   };
