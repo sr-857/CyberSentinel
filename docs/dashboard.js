@@ -187,12 +187,14 @@ const FALLBACK_DATA = {
 const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 const deepClone = (value) => JSON.parse(JSON.stringify(value));
 const rotateForward = (array) => {
-  if (!array?.length) return [];
+  if (!Array.isArray(array) || array.length === 0) return [];
   const copy = array.slice();
   copy.push(copy.shift());
   return copy;
 };
 const randomChoice = (array) => array[Math.floor(Math.random() * array.length)];
+const coalesce = (value, fallback) => (value === undefined || value === null ? fallback : value);
+const asArray = (value) => (Array.isArray(value) ? value : []);
 
 function setStatus(message, isError = false) {
   if (!selectors.status) return;
@@ -266,7 +268,7 @@ function renderTable(tableBody, rows, emptyMessage = "No data available.") {
     const tr = document.createElement("tr");
     cols.forEach((value) => {
       const td = document.createElement("td");
-      td.textContent = value ?? "-";
+      td.textContent = value === undefined || value === null ? "-" : value;
       tr.appendChild(td);
     });
     fragment.appendChild(tr);
@@ -276,9 +278,12 @@ function renderTable(tableBody, rows, emptyMessage = "No data available.") {
 }
 
 function updateTotals(kpis) {
-  selectors.totals.ssh.textContent = kpis.ssh_events ?? 0;
-  selectors.totals.apache.textContent = kpis.apache_events ?? 0;
-  selectors.totals.alerts.textContent = kpis.alerts ?? 0;
+  const ssh = coalesce(kpis.ssh_events, 0);
+  const apache = coalesce(kpis.apache_events, 0);
+  const alerts = coalesce(kpis.alerts, 0);
+  selectors.totals.ssh.textContent = ssh;
+  selectors.totals.apache.textContent = apache;
+  selectors.totals.alerts.textContent = alerts;
 }
 
 function buildChartConfig(type, data, overrides = {}) {
@@ -311,14 +316,16 @@ function buildChartConfig(type, data, overrides = {}) {
     },
   };
 
+  const overridePlugins = overrides.plugins || {};
+  const overrideScales = overrides.scales || base.scales;
   return {
     type,
     data,
     options: {
       ...base,
       ...overrides,
-      plugins: { ...base.plugins, ...(overrides.plugins ?? {}) },
-      scales: overrides.scales ?? base.scales,
+      plugins: { ...base.plugins, ...overridePlugins },
+      scales: overrideScales,
     },
   };
 }
@@ -334,8 +341,9 @@ function upsertChart(key, ctxId, config) {
 
 function renderCharts(data) {
   if (!window.Chart) return;
-  const sshTrendLabels = data.ssh_failures_over_time.map((entry) => formatHourLabel(entry.time));
-  const sshTrendValues = data.ssh_failures_over_time.map((entry) => entry.count);
+  const sshTrend = asArray(data.ssh_failures_over_time);
+  const sshTrendLabels = sshTrend.map((entry) => formatHourLabel(entry.time));
+  const sshTrendValues = sshTrend.map((entry) => entry.count);
   upsertChart(
     "sshTrend",
     "ssh-trend-chart",
@@ -354,8 +362,9 @@ function renderCharts(data) {
     })
   );
 
-  const sshTopIpLabels = data.ssh_top_ips.map((entry) => entry.ip);
-  const sshTopIpValues = data.ssh_top_ips.map((entry) => entry.count);
+  const sshTopIps = asArray(data.ssh_top_ips);
+  const sshTopIpLabels = sshTopIps.map((entry) => entry.ip);
+  const sshTopIpValues = sshTopIps.map((entry) => entry.count);
   upsertChart(
     "sshTopIps",
     "ssh-top-ips-chart",
@@ -372,8 +381,9 @@ function renderCharts(data) {
     })
   );
 
-  const apacheStatusLabels = data.apache_status_counts.map((entry) => entry.status);
-  const apacheStatusValues = data.apache_status_counts.map((entry) => entry.count);
+  const apacheStatuses = asArray(data.apache_status_counts);
+  const apacheStatusLabels = apacheStatuses.map((entry) => entry.status);
+  const apacheStatusValues = apacheStatuses.map((entry) => entry.count);
   upsertChart(
     "apacheStatus",
     "apache-status-chart",
@@ -394,8 +404,12 @@ function renderCharts(data) {
     )
   );
 
-  const alertSeverityLabels = data.alert_severity_counts.map((entry) => entry.severity.toUpperCase());
-  const alertSeverityValues = data.alert_severity_counts.map((entry) => entry.count);
+  const alertSeverities = asArray(data.alert_severity_counts);
+  const alertSeverityLabels = alertSeverities.map((entry) => String(entry.severity).toUpperCase());
+  const alertSeverityValues = alertSeverities.map((entry) => entry.count);
+  if (alertSeverityLabels.length === 0) {
+    console.warn("Demo dataset missing alert severity counts; using fallback payload.");
+  }
   upsertChart(
     "alertSeverity",
     "alert-severity-chart",
@@ -412,52 +426,48 @@ function renderCharts(data) {
 }
 
 function renderTables(data) {
-  renderTable(
-    selectors.tables.intel,
-    data.intel_table.map((item) => [
-      item.indicator,
-      item.type,
-      item.source,
-      item.last_seen ?? item.first_seen ?? "-",
-      item.confidence ?? "-",
-    ])
-  );
+  const intelRows = asArray(data.intel_table).map((item) => [
+    item.indicator,
+    item.type,
+    item.source,
+    coalesce(item.last_seen, coalesce(item.first_seen, "-")),
+    coalesce(item.confidence, "-"),
+  ]);
+  renderTable(selectors.tables.intel, intelRows);
 
-  renderTable(
-    selectors.tables.ssh,
-    data.ssh_table.map((item) => [
-      formatTimestamp(item.event_time),
-      item.ip_address,
-      item.username,
-      item.result ?? item.meta?.message ?? "Failed login",
-    ])
-  );
+  const sshRows = asArray(data.ssh_table).map((item) => [
+    formatTimestamp(item.event_time),
+    item.ip_address,
+    item.username,
+    item && item.result !== undefined && item.result !== null
+      ? item.result
+      : item && item.meta && item.meta.message
+      ? item.meta.message
+      : "Failed login",
+  ]);
+  renderTable(selectors.tables.ssh, sshRows);
 
-  renderTable(
-    selectors.tables.apache,
-    data.apache_table.map((item) => [
-      formatTimestamp(item.event_time),
-      item.ip_address,
-      `${item.method ?? "GET"} ${item.path ?? item.request ?? ""}`.trim(),
-      item.status,
-    ])
-  );
+  const apacheRows = asArray(data.apache_table).map((item) => {
+    const method = coalesce(item.method, "GET");
+    const path = coalesce(item.path, coalesce(item.request, ""));
+    return [formatTimestamp(item.event_time), item.ip_address, `${method} ${path}`.trim(), item.status];
+  });
+  renderTable(selectors.tables.apache, apacheRows);
 
-  renderTable(
-    selectors.tables.alerts,
-    data.alerts_table.map((item) => [
-      formatTimestamp(item.created_at ?? item.event_time),
-      item.indicator,
-      item.log_source,
-      item.severity,
-      item.message,
-    ])
-  );
+  const alertRows = asArray(data.alerts_table).map((item) => [
+    formatTimestamp(coalesce(item.created_at, item.event_time)),
+    item.indicator,
+    item.log_source,
+    item.severity,
+    item.message,
+  ]);
+  renderTable(selectors.tables.alerts, alertRows);
 }
 
 function hydrateDashboard() {
   if (!state.data) return;
-  updateTotals(state.data.kpis ?? {});
+  const kpis = state.data && state.data.kpis ? state.data.kpis : {};
+  updateTotals(kpis);
   renderTables(state.data);
   renderCharts(state.data);
 }
@@ -496,14 +506,14 @@ function stampFooterYear() {
 
 function mutateIntel(current) {
   const next = deepClone(current);
-  const previousCount = current.kpis.intel_count ?? 0;
+  const previousCount = coalesce(current.kpis.intel_count, 0);
   const delta = randomInt(-3, 6);
   next.kpis.intel_count = Math.max(80, previousCount + delta);
   next.intel_table = rotateForward(current.intel_table).map((entry, idx) =>
     idx === 0
       ? {
           ...entry,
-          confidence: Math.min(100, (entry.confidence ?? 60) + randomInt(2, 10)),
+          confidence: Math.min(100, coalesce(entry.confidence, 60) + randomInt(2, 10)),
         }
       : entry
   );
@@ -514,8 +524,8 @@ function mutateLogs(current) {
   const next = deepClone(current);
   const sshDelta = randomInt(4, 12);
   const apacheDelta = randomInt(3, 9);
-  next.kpis.ssh_events = (current.kpis.ssh_events ?? 0) + sshDelta;
-  next.kpis.apache_events = (current.kpis.apache_events ?? 0) + apacheDelta;
+  next.kpis.ssh_events = coalesce(current.kpis.ssh_events, 0) + sshDelta;
+  next.kpis.apache_events = coalesce(current.kpis.apache_events, 0) + apacheDelta;
 
   const nowIso = new Date().toISOString();
   const sshIps = next.ssh_top_ips.map((entry) => entry.ip);
@@ -580,7 +590,8 @@ function mutateCorrelation(current) {
     message: chosen.message,
   };
   next.alerts_table = [newAlert, ...current.alerts_table].slice(0, Math.max(6, current.alerts_table.length));
-  next.kpis.alerts = (current.kpis.alerts ?? next.alerts_table.length) + 1;
+  const alertBase = coalesce(current.kpis.alerts, next.alerts_table.length);
+  next.kpis.alerts = alertBase + 1;
 
   const bucket = next.alert_severity_counts.find((entry) => entry.severity === chosen.severity);
   if (bucket) {
@@ -634,15 +645,21 @@ async function simulateCorrelation() {
 }
 
 function registerEventHandlers() {
-  selectors.buttons.fetch?.addEventListener("click", () => {
-    simulateIntelFetch().catch((error) => console.error(error));
-  });
-  selectors.buttons.parse?.addEventListener("click", () => {
-    simulateLogParse().catch((error) => console.error(error));
-  });
-  selectors.buttons.correlate?.addEventListener("click", () => {
-    simulateCorrelation().catch((error) => console.error(error));
-  });
+  if (selectors.buttons.fetch) {
+    selectors.buttons.fetch.addEventListener("click", () => {
+      simulateIntelFetch().catch((error) => console.error(error));
+    });
+  }
+  if (selectors.buttons.parse) {
+    selectors.buttons.parse.addEventListener("click", () => {
+      simulateLogParse().catch((error) => console.error(error));
+    });
+  }
+  if (selectors.buttons.correlate) {
+    selectors.buttons.correlate.addEventListener("click", () => {
+      simulateCorrelation().catch((error) => console.error(error));
+    });
+  }
 }
 
 async function bootstrap() {
