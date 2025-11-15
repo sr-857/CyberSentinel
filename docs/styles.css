@@ -379,8 +379,8 @@ body.page {
 }
 
 .panel__group--charts {
-  grid-template-columns: repeat(2, minmax(280px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.1rem;
 }
 
 .chart-card,
@@ -415,6 +415,17 @@ body.page {
   font-size: 0.8rem;
   color: var(--muted);
 }
+.chart-card__canvas {
+  position: relative;
+  width: 100%;
+  padding-bottom: 72%;
+}
+
+.chart-card__canvas canvas {
+  position: absolute;
+  inset: 0;
+}
+
 .chart-card__canvas {
   position: relative;
   width: 100%;
@@ -482,6 +493,73 @@ canvas {
   color: var(--muted);
   border-top: 1px solid var(--panel-border);
   background: rgba(5, 10, 31, 0.8);
+}
+
+.testimonials {
+  padding: clamp(2.5rem, 6vw, 4rem) clamp(1.5rem, 5vw, 6rem);
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.08), rgba(56, 189, 248, 0.04));
+  border-top: 1px solid rgba(148, 163, 184, 0.12);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.testimonials__intro h2 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+}
+
+.testimonials__intro p {
+  margin: 0;
+  color: rgba(226, 232, 240, 0.85);
+  max-width: 42rem;
+  line-height: 1.6;
+}
+
+.testimonials__grid {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2rem);
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.testimonial-card {
+  background: rgba(8, 15, 35, 0.92);
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  box-shadow: 0 18px 38px rgba(5, 10, 31, 0.35);
+  display: grid;
+  gap: 0.75rem;
+}
+
+.testimonial-card header h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.testimonial-card header p {
+  margin: 0.15rem 0 0;
+  font-size: 0.85rem;
+}
+
+.testimonial-card header a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.testimonial-card blockquote {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(226, 232, 240, 0.88);
+}
+
+.testimonial-card__role {
+  font-size: 0.82rem;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 @media (max-width: 1100px) {
